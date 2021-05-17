@@ -1,0 +1,5 @@
+---
+proxy_enabled: no
+proxy_hostname: shopware.local
+proxy_ssl: no
+shopware_version: v6.4.0.0

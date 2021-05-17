@@ -1,0 +1,14 @@
+---
+- name: copy .psh.yaml.override file for shopware install
+  template:
+    src: ".psh.yaml.override.j2"
+    dest: "/home/vagrant/shopware-dev/.psh.yaml.override"
+
+- name: start docker containers via psh
+  command: chdir=/home/vagrant/shopware-dev/ ./psh.phar docker:start
+
+- name: start bash inside app-server container
+  command: docker exec shopware-dev_app_server_1 bash
+
+- name: init shopware-dev environment inside container
+  command: docker exec shopware-dev_app_server_1 ./psh.phar install

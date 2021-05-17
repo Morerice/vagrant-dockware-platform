@@ -1,0 +1,57 @@
+---
+- name: update apt cache
+  become: yes
+  apt:
+    update_cache: yes
+
+- name: install aptitude
+  apt: 
+    pkg: aptitude
+  become: yes
+
+- name: install nodejs apt key
+  become: yes
+  apt_key: 
+    url: https://deb.nodesource.com/gpgkey/nodesource.gpg.key
+
+- name: add nodejs apt repo
+  become: yes
+  apt_repository: 
+    repo: 'deb https://deb.nodesource.com/node_12.x {{ ansible_distribution_release }} main' 
+    update_cache: yes
+
+- name: install packages required for shopware dev setup
+  become: yes
+  apt: 
+    pkg: ['sudo', 'git', 'apt-transport-https', 'ca-certificates', 'curl', 'software-properties-common', 'php', 'php-cli', 'composer', 'nodejs', 'chromium-browser', 'default-jre-headless', 'docker.io', 'docker-compose']
+    state: latest
+
+- name: install php extensions
+  become: yes
+  apt: 
+    pkg: ['php-gd', 'php-intl', 'php-iconv', 'php-mbstring', 'php-mysql', 'php-xml', 'php-zip', 'php-json', 'php-curl']
+    state: latest
+
+- name: add vagrant user to docker group
+  user:
+    name: vagrant
+    groups: docker
+    append: yes
+  become: yes
+
+- name: add vagrant user to www-data group
+  user:
+    name: vagrant
+    groups: www-data
+    append: yes
+  become: yes
+
+- name: Remove apache2
+  apt:
+    name: apache2
+    state: absent
+
+- name: apt auto remove
+  become: yes
+  apt:
+    autoremove: yes
