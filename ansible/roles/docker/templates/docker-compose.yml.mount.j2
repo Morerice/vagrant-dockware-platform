@@ -19,14 +19,6 @@ services:
       - XDEBUG_ENABLED=1
     volumes:
       - "{{ directory }}:/var/www/html:rw"
-      - "db_volume:/var/lib/mysql"
-
-## ***********************************************************************
-##  PERSISTENT DOCKER VOLUMES
-## ***********************************************************************
-volumes:
-  db_volume:
-    driver: local
 
 ## ***********************************************************************
 ##  NETWORKS

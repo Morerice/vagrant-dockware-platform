@@ -17,15 +17,6 @@ services:
       - web
     environment:
       - XDEBUG_ENABLED=1
-    volumes:
-      - "db_volume:/var/lib/mysql"
-
-## ***********************************************************************
-##  PERSISTENT DOCKER VOLUMES
-## ***********************************************************************
-volumes:
-  db_volume:
-    driver: local
 
 ## ***********************************************************************
 ##  NETWORKS
