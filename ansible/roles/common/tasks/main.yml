@@ -23,7 +23,7 @@
 - name: install packages required for shopware dev setup
   become: yes
   apt: 
-    pkg: ['sudo', 'git', 'apt-transport-https', 'ca-certificates', 'curl', 'software-properties-common', 'php', 'php-cli', 'composer', 'nodejs', 'chromium-browser', 'default-jre-headless', 'docker.io', 'docker-compose']
+    pkg: ['sudo', 'git', 'apt-transport-https', 'ca-certificates', 'curl', 'software-properties-common', 'php', 'php-cli', 'composer', 'nodejs', 'chromium-browser', 'default-jre-headless', 'docker', 'docker.io', 'docker-compose']
     state: latest
 
 - name: install php extensions
@@ -32,18 +32,13 @@
     pkg: ['php-gd', 'php-intl', 'php-iconv', 'php-mbstring', 'php-mysql', 'php-xml', 'php-zip', 'php-json', 'php-curl']
     state: latest
 
-- name: add vagrant user to docker group
+- name: add vagrant user to docker, www-data groups
   become: yes
   user:
     name: vagrant
-    groups: docker
-    append: yes
-
-- name: add vagrant user to www-data group
-  become: yes
-  user:
-    name: vagrant
-    groups: www-data
+    groups:
+      - docker
+      - www-data
     append: yes
 
 - name: Remove apache2

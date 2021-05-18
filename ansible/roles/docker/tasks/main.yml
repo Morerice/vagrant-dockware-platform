@@ -1,29 +1,32 @@
 ---
-- name: copy docker-compose.yml from template
+- name: Copy docker-compose.yml from template
   template:
     src: "docker-compose.yml.j2"
     dest: "/vagrant/docker-compose.yml"
   vars:
     version: "{{ shopware_version }}"
 
-- name: start docker services
+- name: Tear down existing services
   docker_compose:
     project_src: /vagrant
-    remove_orphans: yes
+    state: absent
+
+- name: Start docker services
+  docker_compose:
+    project_src: /vagrant
   register: output
 
-- name: Create source code directory on host vm
+- name: Create workspace directory
   file:
     path: "{{ workspace }}"
     state: directory
     mode: '0775'
     owner: vagrant
-    group: www-data
 
-- name: copy document root to host
+- name: Copy document root to workspace
   command: docker cp shopware:/var/www/html/. "{{ workspace }}"
 
-- name: Recursively change ownership of a directory
+- name: Change ownership of workspace
   file:
     path: "{{ workspace }}"
     state: directory
@@ -37,7 +40,7 @@
     recurse: yes
     mode: a+w
 
-- name: replace docker-compose.yml with workspace mount template
+- name: Replace docker-compose.yml with workspace mount template
   template:
     src: "docker-compose.yml.mount.j2"
     dest: "/vagrant/docker-compose.yml"
@@ -45,7 +48,7 @@
     version: "{{ shopware_version }}"
     directory: "{{ workspace }}"
 
-- name: restart docker services
+- name: Restart docker services
   docker_compose:
     project_src: /vagrant
     build: yes
