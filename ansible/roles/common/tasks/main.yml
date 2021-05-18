@@ -5,9 +5,9 @@
     update_cache: yes
 
 - name: install aptitude
-  apt: 
-    pkg: aptitude
   become: yes
+  apt:
+    pkg: aptitude
 
 - name: install nodejs apt key
   become: yes
@@ -33,20 +33,21 @@
     state: latest
 
 - name: add vagrant user to docker group
+  become: yes
   user:
     name: vagrant
     groups: docker
     append: yes
-  become: yes
 
 - name: add vagrant user to www-data group
+  become: yes
   user:
     name: vagrant
     groups: www-data
     append: yes
-  become: yes
 
 - name: Remove apache2
+  become: yes
   apt:
     name: apache2
     state: absent
@@ -55,3 +56,5 @@
   become: yes
   apt:
     autoremove: yes
+
+## for version 6.4 remove composer and install version 2

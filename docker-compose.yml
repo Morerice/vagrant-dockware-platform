@@ -17,16 +17,14 @@ services:
     environment:
       - XDEBUG_ENABLED=1
     volumes:
+      - "/vagrant/shopware:/var/www/html"
       - "db_volume:/var/lib/mysql"
-      - "shop_volume:/var/www/html"
 
 ## ***********************************************************************
 ##  PERSISTENT DOCKER VOLUMES
 ## ***********************************************************************
 volumes:
   db_volume:
-    driver: local
-  shop_volume:
     driver: local
 
 ## ***********************************************************************
