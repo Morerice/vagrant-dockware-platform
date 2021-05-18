@@ -7,8 +7,15 @@
     version: "{{ shopware_version }}"
 
 - name: Tear down existing services
+  become: yes
   docker_compose:
     project_src: /vagrant
+    state: absent
+
+- name: Remove workspace directory
+  become: yes
+  file:
+    path: "{{ workspace }}"
     state: absent
 
 - name: Start docker services
@@ -35,6 +42,7 @@
     group: www-data
 
 - name: Expand write access for var directory
+  become: yes
   file:
     path: "{{ workspace }}/var"
     recurse: yes
