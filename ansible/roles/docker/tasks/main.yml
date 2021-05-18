@@ -1,9 +1,12 @@
 ---
-- name: comment out document root volume mount
-  command: chdir=/vagrant sed -i 's+- "/vagrant/shopware:/var/www/html"+#- "/vagrant/shopware:/var/www/html"+g' docker-compose.yml
+- name: copy docker-compose.yml from template
+  template:
+    src: "docker-compose.yml.j2"
+    dest: "/vagrant/docker-compose.yml"
+  vars:
+    version: "{{ shopware_version }}"
 
 - name: start docker services
-  become: yes
   docker_compose:
     project_src: /vagrant
     remove_orphans: yes
@@ -11,20 +14,36 @@
 
 - name: Create source code directory on host vm
   file:
-    path: /vagrant/shopware
+    path: "{{ workspace }}"
     state: directory
-    mode: '0755'
+    mode: '0775'
     owner: vagrant
     group: www-data
 
 - name: copy document root to host
-  command: docker cp shopware:/var/www/html/. /vagrant/shopware
+  command: docker cp shopware:/var/www/html/. "{{ workspace }}"
 
-- name: Change access to var directory
-  command: chdir=/vagrant sudo chmod -R a+w shopware/var/*
+- name: Recursively change ownership of a directory
+  file:
+    path: "{{ workspace }}"
+    state: directory
+    recurse: yes
+    owner: vagrant
+    group: www-data
 
-- name: restore document root volume mount
-  command: chdir=/vagrant sed -i 's+#- "/vagrant/shopware:/var/www/html"+- "/vagrant/shopware:/var/www/html"+g' docker-compose.yml
+- name: Expand write access for var directory
+  file:
+    path: "{{ workspace }}/var"
+    recurse: yes
+    mode: a+w
+
+- name: replace docker-compose.yml with workspace mount template
+  template:
+    src: "docker-compose.yml.mount.j2"
+    dest: "/vagrant/docker-compose.yml"
+  vars:
+    version: "{{ shopware_version }}"
+    directory: "{{ workspace }}"
 
 - name: restart docker services
   docker_compose:

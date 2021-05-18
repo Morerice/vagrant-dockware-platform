@@ -12,8 +12,6 @@ Vagrant.configure("2") do |config|
     config.vm.box = "bento/ubuntu-20.04"
     config.vm.box_version = "202012.23.0"
     config.vm.network "private_network", ip: "192.168.35.10"
-#     config.vm.network "forwarded_port", guest: 8000, host: 8000
-#     config.vm.network "forwarded_port", guest: 8080, host: 8080
     config.ssh.insert_key = true
 
     config.vm.hostname = "dockware.local"

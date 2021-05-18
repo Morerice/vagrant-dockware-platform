@@ -1,0 +1,36 @@
+version: "3"
+
+services:
+
+  shopware:
+    image: dockware/dev:{{ version }}
+    container_name: shopware
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "3306:3306"
+      - "2222:22"
+      - "8888:8888"
+      - "9999:9999"
+      - "9998:9998"
+    networks:
+      - web
+    environment:
+      - XDEBUG_ENABLED=1
+    volumes:
+      - "{{ directory }}:/var/www/html:rw"
+      - "db_volume:/var/lib/mysql"
+
+## ***********************************************************************
+##  PERSISTENT DOCKER VOLUMES
+## ***********************************************************************
+volumes:
+  db_volume:
+    driver: local
+
+## ***********************************************************************
+##  NETWORKS
+## ***********************************************************************
+networks:
+  web:
+    external: false

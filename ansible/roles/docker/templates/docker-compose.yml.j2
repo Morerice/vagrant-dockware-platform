@@ -3,8 +3,9 @@ version: "3"
 services:
 
   shopware:
-    image: dockware/dev:latest
+    image: dockware/dev:{{ version }}
     container_name: shopware
+    restart: unless-stopped
     ports:
       - "80:80"
       - "3306:3306"
@@ -17,7 +18,6 @@ services:
     environment:
       - XDEBUG_ENABLED=1
     volumes:
-      - "/vagrant/shopware:/var/www/html"
       - "db_volume:/var/lib/mysql"
 
 ## ***********************************************************************
