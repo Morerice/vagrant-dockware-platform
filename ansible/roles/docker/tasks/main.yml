@@ -19,6 +19,7 @@
     state: absent
 
 - name: Start docker services
+  become: yes
   docker_compose:
     project_src: /vagrant
   register: output
@@ -31,9 +32,11 @@
     owner: vagrant
 
 - name: Copy document root to workspace
+  become: yes
   command: docker cp shopware:/var/www/html/. "{{ workspace }}"
 
 - name: Change ownership of workspace
+  become: yes
   file:
     path: "{{ workspace }}"
     state: directory
@@ -57,6 +60,7 @@
     directory: "{{ workspace }}"
 
 - name: Restart docker services
+  become: yes
   docker_compose:
     project_src: /vagrant
     build: yes
