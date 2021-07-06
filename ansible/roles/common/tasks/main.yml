@@ -63,7 +63,7 @@
 
 - name: setup composer for v6.4
   command: php /tmp/composer-setup.php
-  when: shopware_version.find("6.4") != -1
+  when: shopware_version.find("6.4") != -1 or shopware_version == "latest"
 
 - name: install composer to bin path
   copy:

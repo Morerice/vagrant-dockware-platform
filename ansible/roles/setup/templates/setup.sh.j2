@@ -6,3 +6,4 @@ mysql -u root --password='root' shopware_e2e -e "update sales_channel_domain set
 
 sudo chmod 0777 /var/www/bin/20-xdebug.ini
 sudo cp /var/www/bin/20-xdebug.ini /etc/php/7.4/fpm/conf.d/20-xdebug.ini
+sudo service php7.4-fpm restart

@@ -31,19 +31,29 @@
     owner: vagrant
 
 - name: Copy document root to workspace
+  become: yes
   command: docker cp shopware:/var/www/html/. "{{ workspace }}"
 
-- name: composer require adyen-shopware6 plugin
+- name: Change ownership of workspace
+  become: yes
+  file:
+    path: "{{ workspace }}"
+    state: directory
+    recurse: yes
+    owner: vagrant
+    group: www-data
+
+- name: Install adyen-shopware6 plugin
   command: composer require adyen/adyen-shopware6
   args:
     chdir: "{{ workspace }}"
   register: plugin_installed
   when: plugin_installed is not defined
 
-- name: Change ownership of workspace
+- name: Change ownership of plugin directories
   become: yes
   file:
-    path: "{{ workspace }}"
+    path: "{{ workspace }}/vendor/adyen"
     state: directory
     recurse: yes
     owner: vagrant
