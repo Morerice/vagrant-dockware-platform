@@ -11,24 +11,24 @@
 
 - name: install nodejs apt key
   become: yes
-  apt_key: 
+  apt_key:
     url: https://deb.nodesource.com/gpgkey/nodesource.gpg.key
 
 - name: add nodejs apt repo
   become: yes
-  apt_repository: 
-    repo: 'deb https://deb.nodesource.com/node_12.x {{ ansible_distribution_release }} main' 
+  apt_repository:
+    repo: 'deb https://deb.nodesource.com/node_12.x {{ ansible_distribution_release }} main'
     update_cache: yes
 
 - name: install packages required for shopware dev setup
   become: yes
-  apt: 
-    pkg: ['sudo', 'git', 'apt-transport-https', 'ca-certificates', 'curl', 'software-properties-common', 'php', 'php-cli', 'composer', 'nodejs', 'chromium-browser', 'default-jre-headless', 'docker', 'docker.io', 'docker-compose']
+  apt:
+    pkg: ['sudo', 'git', 'apt-transport-https', 'ca-certificates', 'curl', 'software-properties-common', 'php', 'php-cli', 'nodejs', 'chromium-browser', 'default-jre-headless', 'docker', 'docker.io', 'docker-compose']
     state: latest
 
 - name: install php extensions
   become: yes
-  apt: 
+  apt:
     pkg: ['php-gd', 'php-intl', 'php-iconv', 'php-mbstring', 'php-mysql', 'php-xml', 'php-zip', 'php-json', 'php-curl']
     state: latest
 
@@ -52,4 +52,27 @@
   apt:
     autoremove: yes
 
-## @todo for version 6.4 remove composer and install version 2
+- name: download composer
+  get_url:
+    url: https://getcomposer.org/installer
+    dest: /tmp/composer-setup.php
+
+- name: setup composer for v6.3
+  command: php /tmp/composer-setup.php --version=1.10.1
+  when: shopware_version.find("6.3") != -1
+
+- name: setup composer for v6.4
+  command: php /tmp/composer-setup.php
+  when: shopware_version.find("6.4") != -1
+
+- name: install composer to bin path
+  copy:
+    src: composer.phar
+    dest: /usr/local/bin/composer
+    mode: '0755'
+  become: yes
+
+- name: remove composer.phar
+  file:
+    path: composer.phar
+    state: absent

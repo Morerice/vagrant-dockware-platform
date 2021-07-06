@@ -22,7 +22,6 @@
   become: yes
   docker_compose:
     project_src: /vagrant
-  register: output
 
 - name: Create workspace directory
   file:
@@ -32,8 +31,14 @@
     owner: vagrant
 
 - name: Copy document root to workspace
-  become: yes
   command: docker cp shopware:/var/www/html/. "{{ workspace }}"
+
+- name: composer require adyen-shopware6 plugin
+  command: composer require adyen/adyen-shopware6
+  args:
+    chdir: "{{ workspace }}"
+  register: plugin_installed
+  when: plugin_installed is not defined
 
 - name: Change ownership of workspace
   become: yes
@@ -65,4 +70,3 @@
     project_src: /vagrant
     build: yes
     restarted: yes
-  register: output

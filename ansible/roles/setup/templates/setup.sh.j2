@@ -1,0 +1,8 @@
+#!/bin/bash
+
+mysql -u root --password='root' shopware -e "update sales_channel_domain set url='http://{{ host }}/' where url LIKE '%localhost%'" 2> /dev/null
+mysql -u root --password='root' shopware_test -e "update sales_channel_domain set url='http://{{ host }}/' where url LIKE '%localhost%'" 2> /dev/null
+mysql -u root --password='root' shopware_e2e -e "update sales_channel_domain set url='http://{{ host }}/' where url LIKE '%localhost%'" 2> /dev/null
+
+sudo chmod 0777 /var/www/bin/20-xdebug.ini
+sudo cp /var/www/bin/20-xdebug.ini /etc/php/7.4/fpm/conf.d/20-xdebug.ini

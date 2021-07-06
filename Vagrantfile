@@ -14,7 +14,7 @@ Vagrant.configure("2") do |config|
     config.vm.network "private_network", ip: "192.168.35.10"
     config.ssh.insert_key = false
 
-    config.vm.hostname = "dockware.local"
+    config.vm.hostname = "shopware6.local"
     config.vm.provider :virtualbox do |v|
         v.name = "shopware6.local"
         v.memory = "4096"
