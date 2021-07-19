@@ -5,10 +5,19 @@
     regexp: '^APP_URL='
     line: APP_URL={{ protocol }}://{{ domain }}
 
+- name: Create bin directory for scripts
+  become: yes
+  file:
+    path: /home/vagrant/bin
+    state: directory
+    mode: '0775'
+    owner: vagrant
+
 - name: render xdebug config from template
+  become: yes
   template:
     src: xdebug.ini.j2
-    dest: /vagrant/bin/20-xdebug.ini
+    dest: /home/vagrant/bin/20-xdebug.ini
     owner: www-data
     group: www-data
     mode: '0777'
@@ -16,9 +25,10 @@
     host: "{{ domain }}"
 
 - name: render setup script from template
+  become: yes
   template:
     src: setup.sh.j2
-    dest: /vagrant/bin/setup.sh
+    dest: /home/vagrant/bin/setup.sh
     owner: www-data
     group: www-data
     mode: '0755'
@@ -30,4 +40,5 @@
   command: sysctl net.ipv4.ip_forward=1 && iptables -t nat -A PREROUTING -p tcp --dport 9000 -j DNAT --to-destination 10.0.2.2:9000 && iptables -t nat -A POSTROUTING -j MASQUERADE
 
 - name: copy setup files into shopware container
-  command: docker cp /vagrant/bin/. shopware:/var/www/
+  become: yes
+  command: docker cp /home/vagrant/bin/. shopware:/var/www/
