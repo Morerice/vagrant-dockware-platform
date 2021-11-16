@@ -1,5 +1,5 @@
 ---
 workspace: /home/vagrant/shopware
-shopware_version: 6.4.0.0 # @see https://hub.docker.com/r/dockware/dev/tags
-domain: 192.168.35.10
+shopware_version: 6.4.4.1 # @see https://hub.docker.com/r/dockware/dev/tags for available versions
+domain: 192.168.58.10
 protocol: http

@@ -43,21 +43,22 @@
     owner: vagrant
     group: www-data
 
-- name: Install adyen-shopware6 plugin
-  command: composer require adyen/adyen-shopware6
-  args:
-    chdir: "{{ workspace }}"
-  register: plugin_installed
-  when: plugin_installed is not defined
+# - name: Install adyen-shopware6 plugin
+#   command: composer require adyen/adyen-shopware6
+#   args:
+#     chdir: "{{ workspace }}"
+#   register: plugin_installed
+#   when: plugin_installed is not defined
+#   ignore_errors: yes
 
-- name: Change ownership of plugin directories
-  become: yes
-  file:
-    path: "{{ workspace }}/vendor/adyen"
-    state: directory
-    recurse: yes
-    owner: vagrant
-    group: www-data
+# - name: Change ownership of plugin directories
+#   become: yes
+#   file:
+#     path: "{{ workspace }}/vendor/adyen"
+#     state: directory
+#     recurse: yes
+#     owner: vagrant
+#     group: www-data
 
 - name: Expand write access for var directory
   become: yes

@@ -29,7 +29,7 @@
 - name: install php extensions
   become: yes
   apt:
-    pkg: ['php-gd', 'php-intl', 'php-iconv', 'php-mbstring', 'php-mysql', 'php-xml', 'php-zip', 'php-json', 'php-curl']
+    pkg: ['php-gd', 'php-intl', 'php-mbstring', 'php-mysql', 'php-xml', 'php-zip', 'php-json', 'php-curl']
     state: latest
 
 - name: add vagrant user to docker, www-data groups
