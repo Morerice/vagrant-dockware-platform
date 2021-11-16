@@ -9,9 +9,9 @@ SCRIPT
 
 Vagrant.configure("2") do |config|
 
-    config.vm.box = "bento/ubuntu-20.04"
-    config.vm.box_version = "202012.23.0"
-    config.vm.network "private_network", ip: "192.168.35.10"
+    config.vm.box = "bento/ubuntu-18.04"
+    config.vm.box_version = "201812.27.0"
+    config.vm.network "private_network", ip: "192.168.58.10"
     config.ssh.insert_key = false
 
     config.vm.hostname = "shopware.dev"
